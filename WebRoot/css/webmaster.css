@@ -1,0 +1,48 @@
+*{ margin:0; padding:0;}
+body{ font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+a:link {color: #000; text-decoration:none;}     /* 未访问的链接 */
+a:visited {color: #000; text-decoration:none;}  /* 已访问的链接 */
+a:hover{color:#cd0000;};						/* 划过链接变红*/
+.webmaster{}
+.webmaster_header { height:25px; background:url(../Images/contert_main_bg.png) repeat-x; line-height:25px;}
+.webmaster_header span{ margin-left:20px; }
+.webmaster_main h3{ height:30px; line-height:30px; font-size:14px; font-weight:normal; padding-left:10px; background:#ccc;}
+.webmaster_main p{ line-height:30px; border-bottom:1px solid #ccc; height:30px; padding-left:10px;}
+.webmaster_main p label{ width:120px; float:left; display:block;}
+.webmaster_main p input{ line-height:20px; margin:5px; vertical-align:middle;height:20px}
+.webmaster_main p select{ margin-top:5px;}
+.webmaster_main p span{ margin-right:20px;}
+.table_webmaster td{ border-bottom:1px solid #ccc; border-right:1px solid #ccc}
+.table_webmaster td span{ margin-right:10px;}
+.ml input{ margin-left:20px;}
+#pulic_fenpei input{ float:none; margin:5px; }
+
+.business h3{ height:25px; line-height:25px; background:url(../Images/contert_main_bg.png) repeat-x; font-weight:normal; padding-left:10px; font-size:12px;}
+.business_list tr {}
+.business_list img{ border:none;}
+.business_list tr td{ border-bottom:1px solid #ccc; border-right:1px solid #ccc;}
+.business span{ margin-left:10px;}
+
+.webmaster_main h4{ background:#E9EAEB; height:30px; line-height:30px;}
+ 
+.Mainbody { height:633px; border:1px solid #ccc;overflow:auto;overflow-x:hidden;}
+.contert_nav{height:30px; border-bottom:1px solid #ccc; text-align:center; margin-bottom:5px;}
+.contert_nav ul{ list-style:none;}
+.contert_nav ul li{ float:left; margin-left:10px;}
+.contert_nav ul li a { width:60px;line-height:20px; height:20px; background:#dedede; display:block; text-align:center; margin-top:4px;}
+.contert_main h3{ height:25px; background:url(../Images/contert_main_bg.png) repeat-x; font-size:12px; font-weight:normal; padding-left:10px; line-height:25px;}
+.next{ margin:10px 10px 0 0; float:right;}
+
+.public { background:#f7f7f7;}
+.x_color{ color:red; margin-right:4px;}
+.business_x_height{height:570px;overflow:hidden;}
+.preview_x_height{height:594px;overflow:hidden;}
+#span_l{ margin-left:10px;line-height:30px;}
+#btn{ width:40px; height:23px; border:none;cursor:hand;background:#dedede;}
+.btn{ width:40px; height:23px; border:none;cursor:hand;background:#dedede;}
+#btn_bg{ width:40px; height:23px; border:none;cursor:hand; background:#dedede;}
+.btn_bg{ width:40px; height:23px; border:none;cursor:hand; background:#dedede;}
+.searchtypeheight{height:30px;float:left; color:#013c7e; line-height:30px;}
+.searchtypeheight select{ width:120px; marign-top:4px;}
+.searchtypeheight input{ height:20px;line-height:20px; }
+.searchtypeheight span label{height:25px; margin-left:10px; line-height:25px; margin-bottom:2px;}

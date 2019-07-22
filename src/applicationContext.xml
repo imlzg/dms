@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:tx="http://www.springframework.org/schema/tx" 
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                           http://www.springframework.org/schema/tx 
+                           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+                           http://www.springframework.org/schema/aop 
+                           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd" default-autowire="byName">
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.9:1521:BankAssist" />
+		<property name="user" value="dmsdata" />
+		<property name="password" value="DMS_data_123" />
+
+		<property name="acquireIncrement" value="5" />
+		<property name="initialPoolSize" value="10" />
+		<property name="maxPoolSize" value="50" />
+		<property name="minPoolSize" value="5" />
+		<property name="maxIdleTime" value="600" />		  
+		<property name="numHelperThreads" value="10" />
+		  
+		<property name="acquireRetryDelay" value="1000" />
+		<property name="acquireRetryAttempts" value="60" />
+		<property name="breakAfterAcquireFailure" value="false" />
+	</bean>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource"> 
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.OracleDialect 
+				</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/bank/dms/entity/Employee.hbm.xml</value>
+				<value>com/bank/dms/entity/Department.hbm.xml</value>
+				<value>com/bank/dms/entity/Role.hbm.xml</value>
+                <value>com/bank/dms/entity/Daily.hbm.xml</value>
+                <value>com/bank/dms/entity/Parameter.hbm.xml</value>
+                <value>com/bank/dms/entity/Project.hbm.xml</value>
+                <value>com/bank/dms/entity/Log.hbm.xml</value>
+		    </list>
+		</property>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED"></tx:method>
+			<tx:method name="save*" propagation="REQUIRED"></tx:method>
+			<tx:method name="update*" propagation="REQUIRED"></tx:method>
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="*" propagation="SUPPORTS"></tx:method>
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut expression="execution(* com.bank.dms.biz.imp.*.*(..))" id="serviceMethod"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
+	</aop:config>	
+
+	<bean id="departmentDAO" class="com.bank.dms.dao.imp.DepartmentDAOImp" />
+	<bean id="departmentBIZ" class="com.bank.dms.biz.imp.DepartmentBIZImp" />
+	<bean id="departmentAction" class="com.bank.dms.action.DepartmentAction">
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    <bean id="page" class="com.bank.dms.entity.Page" scope="prototype"></bean>
+    
+    <bean id="JSONAction" class="com.bank.dms.action.JSONAction">
+        <property name="departmentBIZ" ref="departmentBIZ"></property>
+        <property name="roleBIZ" ref="roleBIZ"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+        <property name="task" ref="task"></property>
+        <property name="dailyBIZ" ref="dailyBIZ"></property>
+    </bean>
+    
+    <bean id="LoginAction" class="com.bank.dms.action.LoginAction" scope="prototype">
+        <property name="employeeBIZ" ref="employeeBIZ"></property>
+        <property name="dailyBIZ" ref="dailyBIZ"></property>
+        <property name="projectBIZ" ref="projectBIZ"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    
+    <!-- 员工管理 -->
+    <bean id="employeeDAO" class="com.bank.dms.dao.imp.EmployeeDAOImp"></bean>
+    <bean id="employeeBIZ" class="com.bank.dms.biz.imp.EmployeeBIZImp"></bean>
+    <bean id="EmployeeAction" class="com.bank.dms.action.EmployeeAction" scope="prototype">
+        <property name="pageNum" ref="page"></property>
+        <property name="employeeBIZ" ref="employeeBIZ"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    <!-- 角色管理 -->
+    <bean id="roleDAO" class="com.bank.dms.dao.imp.RoleDAOImp"></bean>
+    <bean id="roleBIZ" class="com.bank.dms.biz.imp.RoleBIZImp">
+        <property name="roleDAO" ref="roleDAO"></property>
+    </bean>
+    <bean id="RoleAction" class="com.bank.dms.action.RoleAction" scope="prototype">
+        <property name="pageNum" ref="page"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    <!-- 日报管理 -->
+    <bean id="dailyDAO" class="com.bank.dms.dao.imp.DailyDAOImp"></bean>
+    <bean id="dailyBIZ" class="com.bank.dms.biz.imp.DailyBIZImp">
+        <property name="dailyDAO" ref="dailyDAO"></property>
+    </bean>
+    <bean id="DailyAction" class="com.bank.dms.action.DailyAction" scope="prototype">
+        <property name="pageNum" ref="page"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    <!-- 项目管理 -->
+    <bean id="projectDAO" class="com.bank.dms.dao.imp.ProjectDAOImp"></bean>
+    <bean id="projectBIZ" class="com.bank.dms.biz.imp.ProjectBIZImp">
+        <property name="projectDAO" ref="projectDAO"></property>
+    </bean>
+    <bean id="ProjectAction" class="com.bank.dms.action.ProjectAction" scope="prototype">
+        <property name="projectBIZ" ref="projectBIZ"></property>
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+    
+    <!-- 查询emailDAO -->
+    <bean class="com.bank.dms.dao.imp.UncommittedEmpDAOImp">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+
+	<bean id="parameterDAO" class="com.bank.dms.dao.imp.ParameterDAOImp" />
+	<bean id="parameterBIZ" class="com.bank.dms.biz.imp.ParameterBIZImp" />
+	<bean id="parameterAction" class="com.bank.dms.action.ParameterAction" scope="prototype">
+        <property name="paramBIZ" ref="parameterBIZ"></property>
+    </bean>
+
+	<bean id="logDAO" class="com.bank.dms.dao.imp.LogDAOImp" />
+	<bean id="logBIZ" class="com.bank.dms.biz.imp.LogBIZImp" />
+	<bean id="logAction" class="com.bank.dms.action.LogAction" />
+	<bean id="logInterceptor" class="com.bank.dms.interceptor.LogInterceptor" />
+
+	<bean id="task" class="com.bank.dms.job.DidaTask">
+		<property name="rtxURL">
+			<value><![CDATA[http://192.168.0.8:8012/sendnotify.cgi?msg=%s&receiver=%s]]></value>
+		</property>
+		<property name="pdfURI">
+			<value><![CDATA[E:/test/]]></value>
+		</property>
+	</bean>
+	<bean id="job" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="task" />
+		<property name="targetMethod" value="work" />
+	</bean>
+    <bean id="job2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="task" />
+        <property name="targetMethod" value="sendEmailTOUncommitted" />
+    </bean>
+	<bean id="triggerOne" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="job" />
+		<!--<property name="cronExpression" value="0 0/2 * * * ? *" />  per minute-->
+		<!--<property name="cronExpression" value="0 0 23 ? * MON-FRI" />  23:00 every Monday to Friday-->
+		<property name="cronExpression" value="0 31 17 ? * MON-FRI" /><!---->
+	</bean>
+	<bean id="triggerTwo" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="job2" />
+        <property name="cronExpression" value="0 33 16 ? * MON-FRI" />
+	</bean>
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="triggerOne" />
+				<ref bean="triggerTwo" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!--
+		<property name="username" value="bank_dms@126.com" />
+		<property name="password" value="dms123456789" />
+		-->
+		<property name="username" value="bank2@126.com" />
+		<property name="password" value="fenghuang" />
+		<property name="host" value="smtp.126.com" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="mail" class="com.bank.dms.job.Mail" />
+</beans>

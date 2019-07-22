@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <security:http>
+        <security:intercept-url pattern="/login/**" filters="none"/>
+        <security:intercept-url pattern="/loginaction" filters="none"/>
+        <security:intercept-url pattern="/css/**" filters="none"/>
+        <security:intercept-url pattern="/js/**" filters="none"/>
+        <security:intercept-url pattern="/images/**" filters="none"/>
+        <security:intercept-url pattern="/listRole.action" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/listRole" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/employee/employeeReg.jsp" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/listDaily.action" access="ROLE_DIRECTOR, ROLE_PM"/>
+        <security:intercept-url pattern="/listDaily" access="ROLE_DIRECTOR, ROLE_PM"/>
+        <security:intercept-url pattern="/**" access="ROLE_ADMIN, ROLE_DIRECTOR, ROLE_PM, ROLE_EMPLOYEE"/>
+        
+        <security:session-management>
+            <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" ></security:concurrency-control>
+        </security:session-management>
+        
+        <security:form-login login-page="/login/login.jsp" default-target-url="/index.jsp" authentication-failure-url="/login/login.jsp" />
+        
+        <security:logout logout-success-url="/login/login.jsp" />
+    </security:http>
+    
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:jdbc-user-service data-source-ref="dataSource"
+                users-by-username-query="SELECT emp_.name loginname, emp_.password password, 1 enabled FROM dms_employee emp_ WHERE emp_.name=?"
+                authorities-by-username-query="SELECT emp_.name loginname, 'ROLE_TEMP' authoritiesname FROM dms_employee emp_ WHERE emp_.name=?"
+            />
+        </security:authentication-provider>
+    </security:authentication-manager>
+    
+</beans>
