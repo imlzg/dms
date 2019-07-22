@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+
+	<package name="default" extends="struts-default" namespace="/">
+		<interceptors>
+			<interceptor name="sysLog" class="logInterceptor" />
+			<interceptor-stack name="log-default">
+				<interceptor-ref name="sysLog" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="log-default" />
+
+
+		<action name="addDepartment" class="departmentAction" method="add">
+			<result name="success">/department/department.jsp</result>
+		</action>
+		<action name="editDepartment" class="departmentAction" method="edit">
+			<result name="success">/department/department.jsp</result>
+		</action>
+		<action name="saveDepartment" class="departmentAction" method="save">
+			<result name="success" type="redirect">listDepartment.action</result>
+		</action>
+		<action name="listDepartment" class="departmentAction" method="list">
+			<result name="success">/department/department.jsp</result>
+		</action>
+        <action name="deleteDepartment" class="departmentAction" method="delete">
+            <result name="success" type="redirect">listDepartment.action</result>
+        </action>
+        <action name="updateDepartment" class="departmentAction" method="edit">
+            <result name="success">/department/departmentUpdate.jsp</result>
+        </action>
+        <action name="doUpdateDepartment" class="departmentAction" method="doEdit">
+            <result name="success" type="redirect">listDepartment.action</result>
+        </action>
+        
+        <action name="deleteParameter" class="parameterAction" method="delete">
+            <result name="success" type="redirect">listRole.action</result>
+        </action>
+        
+        <!-- 员工管理 -->
+        <action name="saveEmployee" class="EmployeeAction" method="save">
+            <result name="success" type="redirect">listEmployee.action</result>
+            <result name="input">/employee/employeeReg.jsp</result>
+        </action>
+        <action name="editEmployee" class="EmployeeAction" method="edit">
+            <result>/employee/employeeUpdate.jsp</result>
+        </action>
+        <action name="doEditEmployee" class="EmployeeAction" method="doEdit">
+            <result name="success" type="redirect">listEmployee.action?pageNum.page=${pageNum.page}&amp;searchEmp.department.id=${searchEmp.department.id}&amp;searchEmp.role.id=${searchEmp.role.id}&amp;searchEmp.name=${searchEmp.name}</result>
+            <result name="input">/employee/employeeUpdate.jsp</result>
+        </action>
+        <action name="deleteEmployee" class="EmployeeAction" method="delete">
+            <result name="success" type="redirect">listEmployee.action?pageNum.page=${pageNum.page}&amp;searchEmp.department.id=${searchEmp.department.id}&amp;searchEmp.role.id=${searchEmp.role.id}&amp;searchEmp.name=${searchEmp.name}</result>
+        </action>
+        <action name="listEmployee" class="EmployeeAction" method="list">
+            <result>/employee/employeeList.jsp</result>
+        </action>
+        
+        <!-- jquery json -->
+        <action name="jsonaction_allDept" class="JSONAction" method="allDept"></action>
+        <action name="jsonaction_allRoel" class="JSONAction" method="allRoel"></action>
+        <action name="jsonaction_allEmployee" class="JSONAction" method="allEmployee"></action>
+        <action name="jsonaction_setJs" class="JSONAction" method="setJs"></action>
+        <action name="jsonaction_childMenus" class="JSONAction" method="childMenus"></action>
+        <action name="jsonaction_task" class="JSONAction" method="task"></action>
+        <action name="jsonaction_previewDaily" class="JSONAction" method="previewDaily"></action>
+        
+        <!-- 角色管理 -->
+        <action name="saveRole" class="RoleAction" method="save">
+            <result name="success" type="redirect">listRole.action</result>
+            <result name="input">/parameter/setting.jsp</result>
+        </action>
+        <action name="editRole" class="RoleAction" method="edit">
+            <result>/parameter/setting.jsp</result>
+        </action>
+        <action name="doEditRole" class="RoleAction" method="doEdit">
+            <result name="success" type="redirect">listRole.action</result>
+        </action>
+        <action name="deleteRole" class="RoleAction" method="delete">
+            <result name="success" type="redirect">listRole.action</result>
+        </action>
+        <action name="listRole" class="RoleAction" method="list">
+            <result>/parameter/setting.jsp</result>
+        </action>
+        
+        
+        
+        <action name="saveParameter" class="parameterAction" method="save">
+        <!-- 
+            <result name="success" type="redirect">listParameter.action</result>
+         -->
+            <result name="success" type="redirect">listRole.action</result>
+        </action>
+        <action name="listParameter" class="parameterAction" method="list">
+            <result name="success">/parameter/parameterList.jsp</result>
+        </action>
+        
+        
+        <!-- 日报管理 -->
+        <action name="saveDaily" class="DailyAction" method="save">
+            <result name="success" type="redirect">previewDaily.action</result>
+            <result name="input">/daily/dailyReg.jsp</result>
+        </action>
+        <action name="editDaily" class="DailyAction" method="edit">
+            <result>/daily/dailyUpdate.jsp</result>
+        </action>
+        <action name="doEditDaily" class="DailyAction" method="doEdit">
+            <result name="success" type="redirect">listDaily.action?pageNum.page=${pageNum.page}&amp;searchRole.name=${searchRole.name}</result>
+            <result name="input">/daily/dailyUpdate.jsp</result>
+        </action>
+        <action name="deleteDaily" class="DailyAction" method="delete">
+            <result name="success" type="redirect">listDaily.action?pageNum.page=${pageNum.page}&amp;searchRole.name=${searchRole.name}</result>
+        </action>
+        <action name="listDaily" class="DailyAction" method="list">
+            <result>/daily/dailylist_jsp.jsp</result>
+        </action>
+        <action name="previewDaily" class="DailyAction" method="previewDaily">
+            <result>/daily/dailyList.jsp</result>
+        </action>
+        <action name="reviewDaily" class="DailyAction" method="reviewDaily">
+            <result>/daily/reviewdaily.jsp</result>
+        </action>
+        <action name="doReviewDaily" class="DailyAction" method="doReviewDaily">
+            <result>/daily/reviewdaily.jsp</result>
+            <result name="success" type="redirect">listDaily.action?pageNum.page=${pageNum.page}&amp;searchRole.name=${searchRole.name}</result>
+        </action>
+        
+        
+        <!-- 项目管理 -->
+        <action name="saveProject" class="ProjectAction" method="save">
+            <result name="success" type="redirect">listProject.action</result>
+            <result name="input">/project/addProject.jsp</result>
+        </action>
+        <action name="editProject" class="ProjectAction" method="edit">
+            <result>/project/viewproject.jsp</result>
+        </action>
+        <action name="doEditProject" class="ProjectAction" method="doEdit">
+            <result name="success" type="redirect">listProject.action</result>
+            <result name="input">/project/viewproject.jsp</result>
+        </action>
+        <action name="proStatus" class="ProjectAction" method="proStatus">
+            <result name="success" type="redirect">listProject.action</result>
+            <result name="input">/project/viewproject.jsp</result>
+        </action>
+        <action name="listProEmps" class="ProjectAction" method="proEmps">
+            <result>/project/viewproject.jsp</result>
+        </action>
+        <action name="deleteProject" class="ProjectAction" method="delete">
+            <result name="success" type="redirect">listProject.action</result>
+        </action>
+        <action name="listProject" class="ProjectAction" method="list">
+            <result>/project/myProject.jsp</result>
+        </action>
+        <action name="deleteProEmp" class="ProjectAction" method="deleteProEmp">
+            <result name="success" type="redirect">editProject.action?pro.id=${pro.id}</result>
+        </action>
+        <action name="disEmp" class="ProjectAction" method="disEmp">
+            <result name="success" type="redirect">editProject.action?pro.id=${pro.id}</result>
+        </action>
+        <action name="batchDisEmp" class="ProjectAction" method="batchDisEmp">
+            <result name="success" type="redirect">editProject.action?pro.id=${pro.id}</result>
+        </action>
+        
+        <action name="loginaction" class="LoginAction" method="login">
+            <result>/index.jsp</result>
+            <result name="input">/login/login.jsp</result>
+        </action>
+        
+        <action name="logout" class="LoginAction" method="logout">
+            <result>/login/login.jsp</result>
+        </action>
+
+	</package>
+</struts>

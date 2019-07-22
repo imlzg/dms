@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bank.dms.entity.Employee" table="DMS_EMPLOYEE" >
+		<id name="id" column="ID" type="java.lang.Integer">
+			<generator class="sequence">
+				<param name="sequence">DMS_EMPLOYEE_SEQ</param>
+			</generator>
+		</id>
+		<property name="name" column="NAME" type="java.lang.String" />
+		<property name="password" column="PASSWORD" type="java.lang.String" />
+		<property name="gender" column="GENDER" type="java.lang.String" />
+		<property name="address" column="ADDRESS" type="java.lang.String" />
+		<property name="phone" column="PHONE" type="java.lang.String" />
+		<property name="email" column="EMAIL" type="java.lang.String" />
+		<property name="status" column="STATUS" type="java.lang.String" />
+
+		<many-to-one name="department" column="DEPARTMENT" class="com.bank.dms.entity.Department" not-null="true" />
+		<many-to-one name="role" column="ROLE" class="com.bank.dms.entity.Role" not-null="true" />
+        
+        <set name="projects" lazy="true" inverse="true" table="DMS_PROJECT_EMP">
+            <key column="EMPLOYEEID"></key>
+            <one-to-many class="com.bank.dms.entity.Project" />
+        </set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bank.dms.entity.Parameter" table="DMS_PARAMETER" >
+		<id name="id" column="ID" type="java.lang.Integer">
+			<generator class="sequence">
+				<param name="sequence">DMS_PARAMETER_SEQ</param>
+			</generator>
+		</id>
+		<property name="name" column="NAME" type="java.lang.String" />
+		<property name="code" column="CODE" type="java.lang.String" />
+		<property name="value" column="VALUE" type="java.lang.String" />
+		<property name="expression" column="EXPRESSION" type="java.lang.String" />
+		<property name="descr" column="DESCR" type="java.lang.String" />
+		<property name="orderBy" column="ORDERBY" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

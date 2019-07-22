@@ -1,0 +1,10 @@
+body{
+	overflow: hidden;
+}
+.border-right-class{
+	width: 99.8%;
+}
+.scoll-class{
+	height: 90.4%;
+	overflow: auto;
+}
